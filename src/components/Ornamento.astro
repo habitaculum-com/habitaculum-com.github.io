@@ -1,0 +1,29 @@
+---
+/** Divisor ornamental: hojas de junco y un pequeño camalote en el centro. */
+interface Props { class?: string }
+const { class: clase = '' } = Astro.props;
+---
+<div class={`ornamento ${clase}`} aria-hidden="true">
+  <svg viewBox="0 0 360 40">
+    <path d="M10,20 C60,20 90,8 140,18 C150,20 158,22 164,20" />
+    <path d="M350,20 C300,20 270,8 220,18 C210,20 202,22 196,20" />
+    <path class="relleno" d="M120,16 C126,6 136,4 142,6 C138,14 130,18 120,16 Z" />
+    <path class="relleno" d="M240,16 C234,6 224,4 218,6 C222,14 230,18 240,16 Z" />
+    <path class="relleno" d="M84,18 C92,24 100,26 106,24 C100,18 92,16 84,18 Z" />
+    <path class="relleno" d="M276,18 C268,24 260,26 254,24 C260,18 268,16 276,18 Z" />
+    <g class="flor">
+      <path class="relleno" d="M180,20 C172,12 172,4 180,0 C188,4 188,12 180,20 Z" />
+      <path class="relleno" d="M180,20 C170,22 164,16 164,10 C172,10 178,14 180,20 Z" />
+      <path class="relleno" d="M180,20 C190,22 196,16 196,10 C188,10 182,14 180,20 Z" />
+      <circle class="relleno" cx="180" cy="28" r="2.2" />
+      <circle class="relleno" cx="172" cy="32" r="1.4" />
+      <circle class="relleno" cx="188" cy="32" r="1.4" />
+    </g>
+  </svg>
+</div>
+<style>
+  .ornamento { display: flex; justify-content: center; color: var(--verde); margin: 2rem auto; }
+  svg { width: min(360px, 80%); height: auto; overflow: visible; }
+  path { fill: none; stroke: currentColor; stroke-width: 1.1; stroke-linecap: round; }
+  .relleno { fill: currentColor; stroke: none; opacity: .85; }
+</style>

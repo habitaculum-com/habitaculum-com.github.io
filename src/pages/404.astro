@@ -1,0 +1,10 @@
+---
+import Base from '../layouts/Base.astro';
+import Cabecera from '../components/Cabecera.astro';
+import { url } from '../lib/site';
+import { PAGINAS } from '../textos';
+---
+<Base titulo={PAGINAS.noEncontrada.titulo}>
+  <Cabecera {...PAGINAS.noEncontrada} />
+  <p style="text-align:center"><a href={url('')}>Volver a la portada</a> · <a href={url('buscar/')}>Buscar</a></p>
+</Base>

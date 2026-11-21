@@ -1,0 +1,47 @@
+---
+/** Botón sol / luna para alternar día y noche. */
+---
+<button class="tema" type="button" aria-label="Cambiar a modo noche" title="Día / noche">
+  <svg viewBox="0 0 40 40" aria-hidden="true">
+    <g class="sol">
+      <circle cx="20" cy="20" r="7" />
+      {Array.from({ length: 8 }, (_, i) => (
+        <path d="M20,5 L20,9" transform={`rotate(${i * 45} 20 20)`} />
+      ))}
+    </g>
+    <path class="luna" d="M25,8 A13,13 0 1 0 32,26 A10,10 0 1 1 25,8 Z" />
+  </svg>
+</button>
+<style>
+  .tema {
+    width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--linea);
+    background: var(--papel); color: var(--verde); cursor: pointer; display: grid; place-items: center;
+    transition: background 1s, border-color 1s, transform .3s;
+  }
+  .tema:hover { transform: rotate(-12deg); }
+  .tema:focus-visible { outline: 2px solid var(--verde); outline-offset: 3px; }
+  svg { width: 26px; height: 26px; overflow: visible; }
+  .sol circle { fill: #e0a03a; }
+  .sol path { stroke: #e0a03a; stroke-width: 2; stroke-linecap: round; }
+  .luna { fill: #e9dfc8; }
+  .sol, .luna { transform-origin: 20px 20px; transition: transform .8s cubic-bezier(.6,0,.2,1), opacity .6s; }
+  .luna { opacity: 0; transform: rotate(-90deg) scale(.4); }
+  :global([data-theme='noche']) .sol { opacity: 0; transform: rotate(90deg) scale(.4); }
+  :global([data-theme='noche']) .luna { opacity: 1; transform: none; }
+</style>
+<script>
+  const botones = document.querySelectorAll<HTMLButtonElement>('.tema');
+  const actualizar = () => {
+    const noche = document.documentElement.dataset.theme === 'noche';
+    botones.forEach((b) => b.setAttribute('aria-label', noche ? 'Cambiar a modo día' : 'Cambiar a modo noche'));
+  };
+  botones.forEach((b) =>
+    b.addEventListener('click', () => {
+      const nuevo = document.documentElement.dataset.theme === 'noche' ? 'dia' : 'noche';
+      document.documentElement.dataset.theme = nuevo;
+      try { localStorage.setItem('tema', nuevo); } catch {}
+      actualizar();
+    }),
+  );
+  actualizar();
+</script>

@@ -1,0 +1,20 @@
+---
+import Base from '../../layouts/Base.astro';
+import Cabecera from '../../components/Cabecera.astro';
+import Pestanas from '../../components/Pestanas.astro';
+import ListaSeccion from '../../components/ListaSeccion.astro';
+import { CATEGORIAS, obtenerPosts } from '../../lib/site';
+import { PAGINAS } from '../../textos';
+
+export function getStaticPaths() {
+  return [{ params: { tipo: 'ficcion' } }, { params: { tipo: 'poesia' } }];
+}
+const tipo = Astro.params.tipo as 'ficcion' | 'poesia';
+const info = CATEGORIAS[tipo];
+const posts = (await obtenerPosts()).filter((p) => p.data.categoria === tipo);
+---
+<Base titulo={info.nombre} descripcion={info.descripcion}>
+  <Cabecera antetitulo={PAGINAS.escritos.antetitulo} titulo={info.nombre} bajada={info.descripcion} />
+  <Pestanas activa={tipo} />
+  <div class="contenedor"><ListaSeccion posts={posts} /></div>
+</Base>

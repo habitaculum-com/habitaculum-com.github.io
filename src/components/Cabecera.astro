@@ -1,0 +1,17 @@
+---
+/** Encabezado de página interior con ornamento. */
+import Ornamento from './Ornamento.astro';
+interface Props { antetitulo?: string; titulo: string; bajada?: string }
+const { antetitulo, titulo, bajada } = Astro.props;
+---
+<header class="cab contenedor">
+  {antetitulo && <p class="versal">{antetitulo}</p>}
+  <h1>{titulo}</h1>
+  {bajada && <p class="bajada">{bajada}</p>}
+  <Ornamento />
+</header>
+<style>
+  .cab { text-align: center; padding-top: 4rem; max-width: 760px; }
+  .bajada { font-style: italic; color: var(--tinta-suave); font-size: 1.2rem; }
+  .cab :global(.ornamento) { margin-bottom: 0; }
+</style>

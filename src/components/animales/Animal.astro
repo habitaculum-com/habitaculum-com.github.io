@@ -1,0 +1,50 @@
+---
+/**
+ * Ilustración con dos versiones (día / noche) que se funden al cambiar el tema.
+ */
+import { url } from '../../lib/site';
+
+interface Props {
+  nombre: string;
+  dia: string;
+  noche: string;
+  /** relación ancho/alto de cada imagen (para reservar espacio sin saltos) */
+  proporcionDia: number;
+  proporcionNoche: number;
+  /** ancho de la imagen de noche relativo a la de día (1 = igual) */
+  escalaNoche?: number;
+  class?: string;
+  cargaInmediata?: boolean;
+}
+const {
+  nombre, dia, noche, proporcionDia, proporcionNoche, escalaNoche = 1,
+  class: clase = '', cargaInmediata = false,
+} = Astro.props;
+const carga = cargaInmediata ? 'eager' : 'lazy';
+---
+<div class={`animal ${clase}`} role="img" aria-label={nombre}
+  style={`--prop-dia:${proporcionDia};--prop-noche:${proporcionNoche};--escala-noche:${escalaNoche}`}>
+  <img class="version dia" src={url(`animales/${dia}`)} alt="" loading={carga} decoding="async" />
+  <div class="version noche">
+    <img src={url(`animales/${noche}`)} alt="" loading={carga} decoding="async" />
+  </div>
+</div>
+
+<style>
+  .animal { position: relative; width: 100%; aspect-ratio: var(--prop-dia); }
+  .version {
+    position: absolute; left: 50%; bottom: 0; translate: -50% 0;
+    transition: opacity 2.4s ease-in-out, transform 2.8s cubic-bezier(.45, 0, .25, 1);
+  }
+  img.version, .version img { display: block; width: 100%; height: auto; }
+  .dia { width: 100%; opacity: 1; }
+  .noche { width: calc(100% * var(--escala-noche)); opacity: 0; transform: translateY(2%) scale(.99); transform-origin: 50% 100%; }
+
+  :global([data-theme='noche']) .dia { opacity: 0; transform: translateY(1.5%) scale(.995); }
+  :global([data-theme='noche']) .noche { opacity: 1; transform: none; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .animal { animation: respira 8s ease-in-out infinite; transform-origin: 50% 100%; }
+  }
+  @keyframes respira { 0%, 100% { scale: 1 1; } 50% { scale: 1.004 1.008; } }
+</style>

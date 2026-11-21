@@ -1,0 +1,64 @@
+---
+/**
+ * Capa decorativa fija: luciérnagas de noche, libélulas de día.
+ * No intercepta clics y se desactiva con "reducir movimiento".
+ */
+const luciernagas = Array.from({ length: 30 }, (_, i) => ({
+  x: (i * 37 + 7) % 100,
+  y: 6 + ((i * 53) % 90),
+  d: 6 + (i % 5) * 1.7,
+  r: (i * 0.9) % 6,
+  t: 3 + (i % 3),
+}));
+---
+<div class="ambiente" aria-hidden="true">
+  {luciernagas.map((l) => (
+    <span class="luciernaga" style={`left:${l.x}%;top:${l.y}%;width:${l.t}px;height:${l.t}px;animation-duration:${l.d}s,${l.d / 2.2}s;animation-delay:-${l.r}s,-${l.r}s`} />
+  ))}
+  <svg class="libelula l1" viewBox="0 0 60 40"><g>
+    <ellipse class="ala" cx="22" cy="14" rx="16" ry="5" transform="rotate(-18 22 14)" />
+    <ellipse class="ala" cx="38" cy="14" rx="16" ry="5" transform="rotate(18 38 14)" />
+    <ellipse class="ala" cx="22" cy="22" rx="13" ry="4" transform="rotate(14 22 22)" />
+    <ellipse class="ala" cx="38" cy="22" rx="13" ry="4" transform="rotate(-14 38 22)" />
+    <path class="cuerpo" d="M30,8 L30,38" />
+  </g></svg>
+  <svg class="libelula l2" viewBox="0 0 60 40"><g>
+    <ellipse class="ala" cx="22" cy="14" rx="16" ry="5" transform="rotate(-18 22 14)" />
+    <ellipse class="ala" cx="38" cy="14" rx="16" ry="5" transform="rotate(18 38 14)" />
+    <ellipse class="ala" cx="22" cy="22" rx="13" ry="4" transform="rotate(14 22 22)" />
+    <ellipse class="ala" cx="38" cy="22" rx="13" ry="4" transform="rotate(-14 38 22)" />
+    <path class="cuerpo" d="M30,8 L30,38" />
+  </g></svg>
+</div>
+<style>
+  .ambiente { position: fixed; inset: 0; pointer-events: none; z-index: 15; overflow: hidden; }
+  .luciernaga {
+    position: absolute; border-radius: 50%;
+    background: #f4e27a; box-shadow: 0 0 10px 3px rgba(244, 226, 122, .55);
+    opacity: 0; transition: opacity 1.5s;
+  }
+  :global([data-theme='noche']) .luciernaga { opacity: 1; }
+  .libelula { position: absolute; width: 38px; opacity: .55; transition: opacity 1.2s; }
+  :global([data-theme='noche']) .libelula { opacity: 0; }
+  .l1 { top: 30%; left: -60px; }
+  .l2 { top: 70%; left: -60px; width: 28px; }
+  .ala { fill: rgba(140, 170, 160, .35); stroke: var(--verde); stroke-width: .8; }
+  .cuerpo { stroke: var(--verde); stroke-width: 2.6; stroke-linecap: round; }
+  @media (prefers-reduced-motion: no-preference) {
+    :global([data-theme='noche']) .luciernaga { animation: vagar ease-in-out infinite alternate, titilar ease-in-out infinite alternate; }
+    .l1 { animation: vuelo 38s linear infinite; }
+    .l2 { animation: vuelo 52s linear infinite; animation-delay: -20s; }
+    .ala { animation: aleteo .12s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: center; }
+  }
+  @media (prefers-reduced-motion: reduce) { .libelula { display: none; } }
+  @keyframes vagar { 0% { transform: translate(0, 0); } 50% { transform: translate(24px, -30px); } 100% { transform: translate(-10px, -60px); } }
+  @keyframes titilar { from { opacity: .15; } to { opacity: 1; } }
+  @keyframes vuelo {
+    0% { transform: translate(0, 0) rotate(90deg); }
+    25% { transform: translate(30vw, -40px) rotate(80deg); }
+    50% { transform: translate(55vw, 20px) rotate(100deg); }
+    75% { transform: translate(80vw, -30px) rotate(85deg); }
+    100% { transform: translate(110vw, 0) rotate(90deg); }
+  }
+  @keyframes aleteo { from { transform: scaleY(1); } to { transform: scaleY(.6); } }
+</style>

@@ -1,0 +1,165 @@
+---
+import '../styles/global.css';
+import CambioTema from '../components/CambioTema.astro';
+import Ambiente from '../components/Ambiente.astro';
+import { SITIO, url } from '../lib/site';
+import { MENU, CATEGORIAS } from '../textos';
+
+interface Props { titulo?: string; descripcion?: string }
+const { titulo, descripcion = SITIO.descripcion } = Astro.props;
+const tituloCompleto = titulo ? `${titulo} · ${SITIO.titulo}` : SITIO.titulo;
+const ruta = Astro.url.pathname;
+const activo = (href: string) => (ruta.startsWith(href) ? 'page' : undefined);
+---
+<!doctype html>
+<html lang="es" data-theme="dia">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{tituloCompleto}</title>
+    <meta name="description" content={descripcion} />
+    <link rel="icon" href={url('favicon.svg')} type="image/svg+xml" />
+    <link rel="alternate" type="application/rss+xml" title={SITIO.titulo} href={url('rss.xml')} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Cormorant+SC:wght@500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
+    <script is:inline>
+      // Aplica el tema guardado antes de pintar, para evitar parpadeos.
+      (function () {
+        var t;
+        try { t = localStorage.getItem('tema'); } catch (e) {}
+        if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'noche' : 'dia';
+        document.documentElement.dataset.theme = t;
+      })();
+    </script>
+  </head>
+  <body>
+    <Ambiente />
+    <header class="cabecera">
+      <div class="contenedor fila">
+        <a class="marca" href={url('')}>
+          <span class="marca-titulo">{SITIO.titulo}</span>
+        </a>
+        <nav class="principal" id="menu-principal" aria-label="Principal">
+          <div class="menu">
+            <a href={url('escritos/')} aria-current={activo(url('escritos/'))}>{MENU.escritos}</a>
+            <div class="submenu">
+              <a href={url('escritos/ficcion/')}>{CATEGORIAS.ficcion.nombre}</a>
+              <a href={url('escritos/poesia/')}>{CATEGORIAS.poesia.nombre}</a>
+            </div>
+          </div>
+          <a class="solo-movil sub" href={url('escritos/ficcion/')}>{CATEGORIAS.ficcion.nombre}</a>
+          <a class="solo-movil sub" href={url('escritos/poesia/')}>{CATEGORIAS.poesia.nombre}</a>
+          <a href={url('investigaciones/')} aria-current={activo(url('investigaciones/'))}>{MENU.investigaciones}</a>
+          <a href={url('sobre-mi/')} aria-current={activo(url('sobre-mi/'))}>{MENU.sobreMi}</a>
+        </nav>
+        <div class="acciones">
+          <a href={url('buscar/')} class="lupa" aria-label="Buscar" title="Buscar">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><path d="M15.5,15.5 L21,21" /></svg>
+          </a>
+          <CambioTema />
+          <button class="hamburguesa" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="menu-principal">
+            <span></span><span></span><span></span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main><slot /></main>
+
+    <footer class="pie">
+      <svg class="pie-agua" viewBox="0 0 1200 60" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0,30 C100,10 200,50 300,30 C400,10 500,50 600,30 C700,10 800,50 900,30 C1000,10 1100,50 1200,30 L1200,60 L0,60 Z" />
+      </svg>
+      <div class="contenedor pie-texto">
+        <p class="versal">{SITIO.titulo}</p>
+        <p>{SITIO.pie} · © {new Date().getFullYear()} {SITIO.autor}</p>
+        <p><a href={url('escritos/')}>{MENU.escritos}</a> · <a href={url('investigaciones/')}>{MENU.investigaciones}</a> · <a href={url('sobre-mi/')}>{MENU.sobreMi}</a> · <a href={url('buscar/')}>Buscar</a> · <a href={url('rss.xml')}>RSS</a></p>
+      </div>
+    </footer>
+
+    <script>
+      // Menú de celular
+      const cab = document.querySelector('.cabecera');
+      const boton = document.querySelector<HTMLButtonElement>('.hamburguesa');
+      boton?.addEventListener('click', () => {
+        const abierto = cab!.classList.toggle('abierta');
+        boton.setAttribute('aria-expanded', String(abierto));
+        boton.setAttribute('aria-label', abierto ? 'Cerrar menú' : 'Abrir menú');
+      });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') cab?.classList.remove('abierta'); });
+
+      // Revela los elementos .revelar al entrar en pantalla
+      const io = new IntersectionObserver(
+        (entradas) => entradas.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } }),
+        { threshold: 0.15 },
+      );
+      document.querySelectorAll('.revelar').forEach((el) => io.observe(el));
+    </script>
+  </body>
+</html>
+
+<style>
+  .cabecera {
+    position: sticky; top: 0; z-index: 20;
+    background: color-mix(in srgb, var(--fondo) 88%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--linea);
+    transition: background 1.4s;
+  }
+  .fila { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 68px; }
+  .marca { text-decoration: none; color: var(--tinta); }
+  .marca-titulo { font-family: var(--f-titulo); font-size: 1.5rem; font-weight: 600; font-style: italic; }
+  .principal { display: flex; align-items: center; gap: 1.4rem; margin-left: auto; }
+  .acciones { display: flex; align-items: center; gap: 1rem; margin-left: 1.4rem; }
+  .solo-movil, .hamburguesa { display: none; }
+  .lupa { color: var(--tinta); }
+  .menu { position: relative; }
+  .submenu {
+    position: absolute; top: 100%; left: 50%; translate: -50% 0; padding: .9rem 1.2rem .7rem; margin-top: .4rem;
+    display: flex; flex-direction: column; gap: .4rem; min-width: 150px; text-align: center;
+    background: var(--papel); border: 1px solid var(--linea); box-shadow: var(--sombra);
+    opacity: 0; visibility: hidden; transform: translateY(-6px); transition: opacity .3s, transform .3s, visibility .3s;
+  }
+  .menu:hover .submenu, .menu:focus-within .submenu { opacity: 1; visibility: visible; transform: none; }
+  .submenu::before { content: ''; position: absolute; left: 0; right: 0; top: -14px; height: 14px; }
+  .principal > a, .menu > a, .submenu a { font-family: var(--f-versal); font-variant: small-caps; text-transform: lowercase; letter-spacing: .12em; text-decoration: none; color: var(--tinta); font-size: 1.05rem; position: relative; }
+  nav a[aria-current='page']::after { content: ''; position: absolute; left: 0; right: 0; bottom: -4px; height: 1px; background: var(--verde); }
+  .lupa svg { width: 20px; height: 20px; display: block; }
+  .lupa circle, .lupa path { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
+  main { position: relative; z-index: 2; }
+  .pie { margin-top: 6rem; position: relative; z-index: 2; }
+  .pie-agua { display: block; width: 100%; height: 50px; }
+  .pie-agua path { fill: var(--vegetacion); opacity: .9; transition: fill 1.4s; }
+  .pie-texto { background: transparent; text-align: center; padding: 1.5rem 0 2.5rem; font-size: .98rem; color: var(--tinta-suave); }
+  .pie { background: linear-gradient(to bottom, transparent 50px, var(--fondo-2) 50px); }
+  /* ---------- Celular ---------- */
+  @media (max-width: 760px) {
+    .fila { min-height: 60px; }
+    .marca-titulo { font-size: 1.35rem; }
+    .acciones { margin-left: auto; gap: .7rem; }
+    .acciones :global(.tema) { width: 40px; height: 40px; }
+    .hamburguesa {
+      display: grid; place-content: center; gap: 5px; width: 40px; height: 40px; padding: 0;
+      background: transparent; border: 1px solid var(--linea); border-radius: 50%; cursor: pointer;
+    }
+    .hamburguesa span { display: block; width: 18px; height: 1.5px; background: var(--tinta); transition: transform .3s, opacity .3s; }
+    .cabecera.abierta .hamburguesa span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .cabecera.abierta .hamburguesa span:nth-child(2) { opacity: 0; }
+    .cabecera.abierta .hamburguesa span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+    .principal {
+      position: absolute; top: 100%; left: 0; right: 0; margin: 0;
+      flex-direction: column; align-items: stretch; gap: 0;
+      padding: .4rem max(16px, env(safe-area-inset-left, 0px)) 1.2rem;
+      background: var(--fondo); border-bottom: 1px solid var(--linea); box-shadow: var(--sombra);
+      opacity: 0; visibility: hidden; transform: translateY(-8px); transition: opacity .3s, transform .3s, visibility .3s;
+    }
+    .cabecera.abierta .principal { opacity: 1; visibility: visible; transform: none; }
+    .principal > a, .menu > a { display: block; padding: .85rem 0; font-size: 1.15rem; border-bottom: 1px solid var(--linea); }
+    .principal > a.sub { padding: .6rem 0 .6rem 1.2rem; font-size: 1.05rem; color: var(--tinta-suave); }
+    .solo-movil { display: block; }
+    .submenu { display: none; }
+    .principal a[aria-current='page']::after { display: none; }
+    .principal a[aria-current='page'] { color: var(--verde); }
+  }
+</style>

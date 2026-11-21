@@ -1,0 +1,21 @@
+---
+/** Pestañas de la sección Escritos: Todos · Ficción · Poesía */
+import { url, CATEGORIAS } from '../lib/site';
+interface Props { activa?: 'ficcion' | 'poesia' }
+const { activa } = Astro.props;
+const items = [
+  { href: url('escritos/'), texto: 'Todos', on: !activa },
+  { href: url('escritos/ficcion/'), texto: CATEGORIAS.ficcion.nombre, on: activa === 'ficcion' },
+  { href: url('escritos/poesia/'), texto: CATEGORIAS.poesia.nombre, on: activa === 'poesia' },
+];
+---
+<nav class="pestanas" aria-label="Tipos de escrito">
+  {items.map((i) => <a href={i.href} aria-current={i.on ? 'page' : undefined}>{i.texto}</a>)}
+</nav>
+<style>
+  .pestanas { display: flex; justify-content: center; gap: .6rem; margin: 2rem auto 1rem; flex-wrap: wrap; }
+  a { font-family: var(--f-versal); font-variant: small-caps; text-transform: lowercase; letter-spacing: .1em; text-decoration: none;
+      color: var(--tinta); padding: .3rem 1.1rem; border: 1px solid var(--linea); border-radius: 999px; transition: all .3s; }
+  a:hover { border-color: var(--verde); color: var(--verde); }
+  a[aria-current='page'] { background: var(--verde); color: var(--fondo); border-color: var(--verde); }
+</style>

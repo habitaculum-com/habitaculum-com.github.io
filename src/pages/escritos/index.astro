@@ -1,0 +1,32 @@
+---
+import Base from '../../layouts/Base.astro';
+import Cabecera from '../../components/Cabecera.astro';
+import Pestanas from '../../components/Pestanas.astro';
+import ListaSeccion from '../../components/ListaSeccion.astro';
+import Ornamento from '../../components/Ornamento.astro';
+import { CATEGORIAS, obtenerPosts } from '../../lib/site';
+import { PAGINAS } from '../../textos';
+const posts = await obtenerPosts();
+const ficcion = posts.filter((p) => p.data.categoria === 'ficcion');
+const poesia = posts.filter((p) => p.data.categoria === 'poesia');
+---
+<Base titulo={PAGINAS.escritos.titulo} descripcion={PAGINAS.escritos.bajada}>
+  <Cabecera {...PAGINAS.escritos} />
+  <Pestanas />
+  <section class="contenedor bloque">
+    <h2>{CATEGORIAS.ficcion.nombre}</h2>
+    <p class="desc">{CATEGORIAS.ficcion.descripcion}</p>
+    <ListaSeccion posts={ficcion} />
+  </section>
+  <Ornamento />
+  <section class="contenedor bloque">
+    <h2>{CATEGORIAS.poesia.nombre}</h2>
+    <p class="desc">{CATEGORIAS.poesia.descripcion}</p>
+    <ListaSeccion posts={poesia} />
+  </section>
+</Base>
+<style>
+  .bloque { max-width: 760px; margin-top: 2.5rem; }
+  .bloque h2 { margin-bottom: .2rem; }
+  .desc { font-style: italic; color: var(--tinta-suave); }
+</style>

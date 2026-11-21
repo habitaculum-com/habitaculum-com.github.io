@@ -1,0 +1,13 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import TarjetaPost from './TarjetaPost.astro';
+interface Props { posts: CollectionEntry<'posts'>[]; vacio?: string }
+const { posts, vacio = 'Todavía no hay nada aquí. Pronto.' } = Astro.props;
+---
+<div class="lista">
+  {posts.length ? posts.map((p) => <TarjetaPost post={p} />) : <p class="vacio">{vacio}</p>}
+</div>
+<style>
+  .lista { max-width: 760px; margin-inline: auto; }
+  .vacio { text-align: center; font-style: italic; color: var(--tinta-suave); margin-top: 2rem; }
+</style>

@@ -1,0 +1,24 @@
+---
+import Base from '../layouts/Base.astro';
+import Cabecera from '../components/Cabecera.astro';
+import Yacare from '../components/animales/Yacare.astro';
+import { PAGINAS } from '../textos';
+// El texto de esta página se edita en src/textos/sobre-mi.md
+import { Content } from '../textos/sobre-mi.md';
+---
+<Base titulo={PAGINAS.sobreMi.titulo}>
+  <Cabecera antetitulo={PAGINAS.sobreMi.antetitulo} titulo={PAGINAS.sobreMi.titulo} />
+  <div class="contenedor sobre">
+    <div class="texto"><Content /></div>
+    <div class="ilustracion revelar"><Yacare /></div>
+  </div>
+</Base>
+<style>
+  .sobre { max-width: 760px; }
+  .texto :global(p:first-of-type) { font-size: 1.35rem; }
+  .texto :global(p:first-of-type::first-letter) { font-family: var(--f-titulo); font-size: 4rem; float: left; line-height: .85; padding: .3rem .5rem 0 0; color: var(--verde); }
+  .texto :global(h2) { margin-top: 2.5rem; }
+  .texto :global(li) { margin-bottom: .5rem; }
+  .texto :global(p:last-child em) { display: block; text-align: right; color: var(--verde); margin-top: 1rem; }
+  .ilustracion { margin: 3rem 0 0 auto; width: min(420px, 80%); }
+</style>

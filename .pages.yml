@@ -1,0 +1,167 @@
+# Panel de edición (Pages CMS: https://app.pagescms.org)
+# Desde ahí se escriben los textos sin tocar código. Al guardar, el cambio
+# se sube a GitHub y el sitio se vuelve a publicar solo en unos minutos.
+
+media:
+  input: public/imagenes
+  output: /imagenes
+  categories: [image]
+
+content:
+  - name: escritos
+    label: Escritos e investigaciones
+    description: Cada entrada es un texto del blog. Elegí la sección y escribí abajo.
+    type: collection
+    path: src/content/posts
+    format: yaml-frontmatter
+    filename: "{primary}.md"
+    view:
+      primary: titulo
+      fields: [titulo, categoria, fecha, borrador]
+      sort: [fecha, titulo]
+      default:
+        sort: fecha
+        order: desc
+    fields:
+      - name: titulo
+        label: Título
+        type: string
+        required: true
+      - name: categoria
+        label: Sección
+        type: select
+        required: true
+        default: ficcion
+        options:
+          values:
+            - { value: ficcion, label: Ficción }
+            - { value: poesia, label: Poesía }
+            - { value: investigaciones, label: Investigaciones }
+      - name: fecha
+        label: Fecha
+        type: date
+        required: true
+      - name: extracto
+        label: Extracto
+        description: Una o dos frases. Se ven en la portada y en las listas.
+        type: text
+        required: true
+      - name: etiquetas
+        label: Etiquetas
+        type: string
+        list: true
+      - name: borrador
+        label: Borrador (no se publica todavía)
+        type: boolean
+        default: false
+      - name: body
+        label: Texto
+        description: "En poesía: Enter separa estrofas; Mayúscula + Enter pasa al verso siguiente."
+        type: rich-text
+
+  - name: sobre-mi
+    label: Sobre mí
+    type: file
+    path: src/textos/sobre-mi.md
+    format: yaml-frontmatter
+    fields:
+      - name: body
+        label: Texto de la página
+        type: rich-text
+
+  - name: textos
+    label: Textos del sitio
+    description: Títulos, menú y frases fijas de cada página.
+    type: file
+    path: src/textos.json
+    format: json
+    fields:
+      - name: sitio
+        label: General
+        type: object
+        fields:
+          - { name: titulo, label: Título del blog, type: string }
+          - { name: subtitulo, label: Subtítulo, type: string }
+          - { name: autor, label: Autor, type: string }
+          - { name: descripcion, label: Descripción para buscadores, type: text }
+          - { name: pie, label: Frase del pie de página, type: string }
+      - name: secciones
+        label: Secciones
+        type: object
+        fields:
+          - name: ficcion
+            label: Ficción
+            type: object
+            fields:
+              - { name: nombre, label: Nombre, type: string }
+              - { name: descripcion, label: Descripción, type: text }
+          - name: poesia
+            label: Poesía
+            type: object
+            fields:
+              - { name: nombre, label: Nombre, type: string }
+              - { name: descripcion, label: Descripción, type: text }
+          - name: investigaciones
+            label: Investigaciones
+            type: object
+            fields:
+              - { name: nombre, label: Nombre, type: string }
+              - { name: descripcion, label: Descripción, type: text }
+      - name: menu
+        label: Menú
+        type: object
+        fields:
+          - { name: escritos, label: Escritos, type: string }
+          - { name: investigaciones, label: Investigaciones, type: string }
+          - { name: sobreMi, label: Sobre mí, type: string }
+      - name: portada
+        label: Portada
+        type: object
+        fields:
+          - { name: antetitulo, label: Texto chico sobre el título, type: string }
+          - { name: ultimoEscrito, label: Etiqueta del último escrito, type: string }
+          - { name: botonLeer, label: Botón para leer, type: string }
+          - { name: invitacion, label: Invitación a deslizar, type: string }
+          - { name: recientesAntetitulo, label: "Recientes: texto chico", type: string }
+          - { name: recientesTitulo, label: "Recientes: título", type: string }
+          - { name: seccionesAntetitulo, label: "Secciones: texto chico", type: string }
+          - { name: seccionesTitulo, label: "Secciones: título", type: string }
+      - name: paginas
+        label: Encabezados de páginas
+        type: object
+        fields:
+          - name: escritos
+            label: Escritos
+            type: object
+            fields:
+              - { name: antetitulo, label: Texto chico, type: string }
+              - { name: titulo, label: Título, type: string }
+              - { name: bajada, label: Bajada, type: string }
+          - name: investigaciones
+            label: Investigaciones
+            type: object
+            fields:
+              - { name: antetitulo, label: Texto chico, type: string }
+              - { name: titulo, label: Título, type: string }
+              - { name: vacio, label: Mensaje cuando no hay textos, type: string }
+          - name: sobreMi
+            label: Sobre mí
+            type: object
+            fields:
+              - { name: antetitulo, label: Texto chico, type: string }
+              - { name: titulo, label: Título, type: string }
+          - name: buscar
+            label: Buscar
+            type: object
+            fields:
+              - { name: antetitulo, label: Texto chico, type: string }
+              - { name: titulo, label: Título, type: string }
+              - { name: bajada, label: Bajada, type: string }
+              - { name: sinResultados, label: Mensaje sin resultados, type: string }
+          - name: noEncontrada
+            label: Página no encontrada
+            type: object
+            fields:
+              - { name: antetitulo, label: Texto chico, type: string }
+              - { name: titulo, label: Título, type: string }
+              - { name: bajada, label: Bajada, type: string }

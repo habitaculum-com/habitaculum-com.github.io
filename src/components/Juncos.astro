@@ -1,0 +1,35 @@
+---
+/** Matas de juncos y pajonal que se mecen con el viento. */
+interface Props { lado?: 'izq' | 'der'; class?: string }
+const { lado = 'izq', class: clase = '' } = Astro.props;
+const tallos = [
+  { x: 20, h: 150, c: 10, d: 0 }, { x: 34, h: 190, c: -8, d: 0.6 }, { x: 48, h: 130, c: 14, d: 1.2 },
+  { x: 60, h: 170, c: -12, d: 0.3 }, { x: 74, h: 120, c: 8, d: 0.9 }, { x: 88, h: 160, c: -6, d: 1.5 },
+  { x: 100, h: 100, c: 12, d: 0.2 },
+];
+---
+<div class={`juncos ${lado} ${clase}`} aria-hidden="true">
+  <svg viewBox="0 0 120 200" preserveAspectRatio="xMidYMax meet">
+    {tallos.map((t) => (
+      <g class="tallo" style={`animation-delay:-${t.d * 3}s; transform-origin:${t.x}px 200px`}>
+        <path d={`M${t.x},200 Q${t.x + t.c},${200 - t.h / 2} ${t.x + t.c * 1.6},${200 - t.h}`} />
+        {t.h > 140 && (
+          <ellipse class="espiga" cx={t.x + t.c * 1.6} cy={200 - t.h + 14} rx="3.2" ry="12" transform={`rotate(${t.c} ${t.x + t.c * 1.6} ${200 - t.h + 14})`} />
+        )}
+      </g>
+    ))}
+  </svg>
+</div>
+<style>
+  .juncos { position: absolute; bottom: 0; width: 120px; pointer-events: none; color: var(--verde-2); }
+  .juncos.izq { left: 0; }
+  .juncos.der { right: 0; transform: scaleX(-1); }
+  svg { width: 100%; height: auto; overflow: visible; display: block; }
+  path { fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; opacity: .75; }
+  .espiga { fill: var(--junco-espiga); transition: fill 1.4s; }
+  .tallo { transform-box: view-box; }
+  @media (prefers-reduced-motion: no-preference) {
+    .tallo { animation: mecer 5.5s ease-in-out infinite; }
+  }
+  @keyframes mecer { 0%, 100% { rotate: -1.5deg; } 50% { rotate: 2.5deg; } }
+</style>

@@ -1,0 +1,26 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { CATEGORIAS, formatearFecha, url, urlPost } from '../lib/site';
+interface Props { post: CollectionEntry<'posts'> }
+const { post } = Astro.props;
+const cat = CATEGORIAS[post.data.categoria];
+---
+<article class="tarjeta revelar">
+  <div class="meta">
+    <a class="chip" href={url(CATEGORIAS[post.data.categoria].ruta)}>{cat.nombre}</a>
+    <time datetime={post.data.fecha.toISOString()}>{formatearFecha(post.data.fecha)}</time>
+  </div>
+  <h3><a href={urlPost(post)}>{post.data.titulo}</a></h3>
+  <p class={post.data.categoria === 'poesia' ? 'extracto verso' : 'extracto'}>{post.data.extracto}</p>
+  <a class="seguir" href={urlPost(post)}>Seguir leyendo <span aria-hidden="true">→</span></a>
+</article>
+<style>
+  .tarjeta { padding: 1.6rem 0 1.8rem; border-bottom: 1px solid var(--linea); }
+  .meta { display: flex; gap: 1rem; align-items: baseline; flex-wrap: wrap; font-size: .95rem; color: var(--tinta-suave); margin-bottom: .4rem; }
+  h3 { margin-bottom: .35em; font-size: 1.65rem; }
+  h3 a { color: var(--tinta); text-decoration: none; background: linear-gradient(var(--verde), var(--verde)) 0 100% / 0 1px no-repeat; transition: background-size .5s; }
+  h3 a:hover { background-size: 100% 1px; color: var(--tinta); }
+  .extracto { color: var(--tinta-suave); margin-bottom: .6rem; }
+  .verso { font-style: italic; }
+  .seguir { font-family: var(--f-versal); font-variant: small-caps; letter-spacing: .1em; text-transform: lowercase; text-decoration: none; }
+</style>

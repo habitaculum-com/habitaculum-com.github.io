@@ -1,0 +1,12 @@
+---
+import Base from '../layouts/Base.astro';
+import Cabecera from '../components/Cabecera.astro';
+import ListaSeccion from '../components/ListaSeccion.astro';
+import { CATEGORIAS, obtenerPosts } from '../lib/site';
+import { PAGINAS } from '../textos';
+const posts = (await obtenerPosts()).filter((p) => p.data.categoria === 'investigaciones');
+---
+<Base titulo={PAGINAS.investigaciones.titulo} descripcion={CATEGORIAS.investigaciones.descripcion}>
+  <Cabecera antetitulo={PAGINAS.investigaciones.antetitulo} titulo={PAGINAS.investigaciones.titulo} bajada={CATEGORIAS.investigaciones.descripcion} />
+  <div class="contenedor"><ListaSeccion posts={posts} vacio={PAGINAS.investigaciones.vacio} /></div>
+</Base>

@@ -1,0 +1,87 @@
+---
+import Base from '../layouts/Base.astro';
+import Cabecera from '../components/Cabecera.astro';
+import { url } from '../lib/site';
+import { PAGINAS } from '../textos';
+---
+<Base titulo={PAGINAS.buscar.titulo} descripcion={PAGINAS.buscar.bajada}>
+  <Cabecera antetitulo={PAGINAS.buscar.antetitulo} titulo={PAGINAS.buscar.titulo} bajada={PAGINAS.buscar.bajada} />
+  <div class="contenedor buscador" data-indice={url('buscar.json')} data-vacio={PAGINAS.buscar.sinResultados}>
+    <label class="sr-only" for="q">Buscar</label>
+    <input id="q" type="search" placeholder="silencio, memoria, yacaré…" autocomplete="off" autofocus />
+    <p class="estado" aria-live="polite"></p>
+    <ol class="resultados"></ol>
+  </div>
+</Base>
+<style>
+  .buscador { max-width: 720px; margin-top: 1rem; }
+  input {
+    width: 100%; font: inherit; font-size: 1.35rem; padding: .9rem 1.2rem; color: var(--tinta);
+    background: var(--papel); border: 1px solid var(--linea); outline: none; transition: border-color .3s, background 1.4s;
+  }
+  input:focus { border-color: var(--verde); }
+  .estado { color: var(--tinta-suave); font-style: italic; margin-top: 1rem; }
+  .resultados { list-style: none; padding: 0; }
+  .resultados :global(li) { padding: 1.2rem 0; border-bottom: 1px solid var(--linea); }
+  .resultados :global(a) { font-family: var(--f-titulo); font-size: 1.5rem; color: var(--tinta); text-decoration: none; }
+  .resultados :global(a:hover) { color: var(--verde); }
+  .resultados :global(.cat) { display: block; font-family: var(--f-versal); font-variant: small-caps; text-transform: lowercase; letter-spacing: .12em; color: var(--verde); font-size: .95rem; }
+  .resultados :global(p) { margin: .3rem 0 0; color: var(--tinta-suave); }
+  .resultados :global(mark) { background: color-mix(in srgb, var(--verde) 25%, transparent); color: inherit; padding: 0 .1em; }
+</style>
+<script>
+  type Item = { titulo: string; url: string; categoria: string; fecha: string; extracto: string; texto: string; etiquetas: string[] };
+  const caja = document.querySelector<HTMLElement>('.buscador')!;
+  const input = document.querySelector<HTMLInputElement>('#q')!;
+  const estado = caja.querySelector('.estado')!;
+  const lista = caja.querySelector('.resultados')!;
+  const normalizar = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+  const escapar = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
+
+  let indice: (Item & { _n: string })[] = [];
+  fetch(caja.dataset.indice!)
+    .then((r) => r.json())
+    .then((datos: Item[]) => {
+      indice = datos.map((d) => ({ ...d, _n: normalizar([d.titulo, d.extracto, d.texto, d.etiquetas.join(' '), d.categoria].join(' ')) }));
+      let inicial: string | null = null;
+      try { inicial = new URLSearchParams(location.search).get('q'); } catch {}
+      if (inicial) input.value = inicial;
+      buscar();
+    });
+
+  function fragmento(item: Item, terminos: string[]) {
+    const texto = item.texto;
+    const n = normalizar(texto);
+    const pos = n.indexOf(terminos[0]);
+    if (pos < 0) return escapar(item.extracto);
+    let ini = Math.max(0, pos - 80);
+    if (ini > 0) ini = texto.indexOf(' ', ini) + 1;
+    let trozo = escapar((ini > 0 ? '…' : '') + texto.slice(ini, pos + 160) + '…');
+    return trozo;
+  }
+
+  function resaltar(html: string, terminos: string[]) {
+    // resalta coincidencias ignorando tildes
+    return html.replace(/[\p{L}\p{N}]+/gu, (palabra) =>
+      terminos.some((t) => normalizar(palabra).includes(t)) ? `<mark>${palabra}</mark>` : palabra,
+    );
+  }
+
+  function buscar() {
+    const q = normalizar(input.value.trim());
+    const terminos = q.split(/\s+/).filter(Boolean);
+    const url = new URL(location.href);
+    q ? url.searchParams.set('q', input.value.trim()) : url.searchParams.delete('q');
+    try { history.replaceState(null, '', url); } catch {}
+    if (!terminos.length) { lista.innerHTML = ''; estado.textContent = `${indice.length} escritos en la bitácora.`; return; }
+    const hallados = indice
+      .map((d) => ({ d, puntos: terminos.every((t) => d._n.includes(t)) ? terminos.reduce((a, t) => a + (normalizar(d.titulo).includes(t) ? 5 : 1), 0) : 0 }))
+      .filter((r) => r.puntos > 0)
+      .sort((a, b) => b.puntos - a.puntos);
+    estado.textContent = hallados.length ? `${hallados.length} ${hallados.length === 1 ? 'resultado' : 'resultados'}` : caja.dataset.vacio!;
+    lista.innerHTML = hallados
+      .map(({ d }) => `<li><span class="cat">${escapar(d.categoria)} · ${escapar(d.fecha)}</span><a href="${d.url}">${resaltar(escapar(d.titulo), terminos)}</a><p>${resaltar(fragmento(d, terminos), terminos)}</p></li>`)
+      .join('');
+  }
+  input.addEventListener('input', buscar);
+</script>

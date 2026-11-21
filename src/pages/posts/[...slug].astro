@@ -1,0 +1,60 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Ornamento from '../../components/Ornamento.astro';
+import { CATEGORIAS, formatearFecha, obtenerPosts, tiempoLectura, url, urlPost } from '../../lib/site';
+
+export async function getStaticPaths() {
+  const posts = await obtenerPosts();
+  return posts.map((post, i) => ({
+    params: { slug: post.id },
+    props: { post, anterior: posts[i + 1], siguiente: posts[i - 1] },
+  }));
+}
+const { post, anterior, siguiente } = Astro.props;
+const { Content } = await render(post);
+const cat = CATEGORIAS[post.data.categoria];
+---
+<Base titulo={post.data.titulo} descripcion={post.data.extracto}>
+  <article class={`articulo contenedor ${post.data.categoria}`}>
+    <header>
+      <a class="chip" href={url(CATEGORIAS[post.data.categoria].ruta)}>{cat.nombre}</a>
+      <h1>{post.data.titulo}</h1>
+      <p class="meta">
+        <time datetime={post.data.fecha.toISOString()}>{formatearFecha(post.data.fecha)}</time>
+        · {tiempoLectura(post.body)} min de lectura
+      </p>
+      <Ornamento />
+    </header>
+    <div class="prosa"><Content /></div>
+    {post.data.etiquetas.length > 0 && (
+      <p class="etiquetas">{post.data.etiquetas.map((e) => <span>#{e}</span>)}</p>
+    )}
+    <Ornamento />
+    <nav class="vecinos" aria-label="Más escritos">
+      {anterior ? <a href={urlPost(anterior)}><small>← Anterior</small>{anterior.data.titulo}</a> : <span />}
+      {siguiente ? <a class="der" href={urlPost(siguiente)}><small>Siguiente →</small>{siguiente.data.titulo}</a> : <span />}
+    </nav>
+  </article>
+</Base>
+<style>
+  .articulo { max-width: 720px; padding-top: 4rem; }
+  header { text-align: center; }
+  .meta { color: var(--tinta-suave); font-style: italic; }
+  .prosa { font-size: 1.22rem; }
+  .prosa :global(h2) { margin-top: 2.2rem; font-size: 1.9rem; }
+  .prosa :global(blockquote) { margin: 2rem 0; padding: .4rem 1.4rem; border-left: 2px solid var(--verde); color: var(--tinta-suave); font-size: 1.3rem; }
+  .prosa :global(> p:first-of-type::first-letter) {
+    float: left; font-family: var(--f-titulo); font-size: 4.2rem; line-height: .85; padding: .35rem .5rem 0 0; color: var(--verde);
+  }
+  .poesia .prosa { font-style: italic; text-align: center; white-space: pre-line; font-size: 1.3rem; line-height: 1.8; }
+  .poesia .prosa :global(> p:first-of-type::first-letter) { float: none; font-size: inherit; padding: 0; color: inherit; font-family: inherit; }
+  .prosa :global(ol), .prosa :global(ul) { padding-left: 1.4rem; }
+  .prosa :global(li) { margin-bottom: .5rem; }
+  .etiquetas { display: flex; gap: .8rem; flex-wrap: wrap; justify-content: center; color: var(--verde); font-style: italic; margin-top: 2.5rem; }
+  .vecinos { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .vecinos a { text-decoration: none; color: var(--tinta); font-family: var(--f-titulo); font-size: 1.25rem; line-height: 1.3; }
+  .vecinos a:hover { color: var(--verde); }
+  .vecinos small { display: block; font-family: var(--f-versal); font-variant: small-caps; text-transform: lowercase; letter-spacing: .12em; color: var(--verde); font-size: .9rem; }
+  .der { text-align: right; }
+</style>
