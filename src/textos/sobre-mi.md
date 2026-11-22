@@ -1,15 +1,19 @@
 ---
 ---
+---
 
-Me llamo **Santi**. Soy psicólogo, trabajo en recursos humanos y escribo desde que tengo memoria, aunque recién ahora me animo a mostrarlo.
+---
 
-Habitáculo es un lugar para pensar en voz alta: investigaciones breves que nacen de preguntas cotidianas, algunas reflexiones sobre el trabajo y las personas, y la escritura que no cabe en ningún informe: poemas y relatos.
+Me llamo Santiago. Soy Licenciado en psicología entre muchas otras cosas, leo y escribo desde que tengo memoria.
 
-Elegí el Iberá como paisaje porque se parece a la forma en que pienso: aguas lentas, islas que flotan, animales que aparecen cuando uno deja de buscarlos. De día, el aguará guazú es un vecino tímido; de noche, otra cosa. Me gusta que las ideas también tengan esas dos caras.
+Habitáculo es un lugar para pensar en voz alta: investigaciones breves que nacen de preguntas cotidianas, algunas reflexiones compartidas con otros autores, y la escritura que no cabe en ningún informe: poemas y relatos.
 
-## Qué vas a encontrar
+Es un espacio de conversación con los que viven entre los libros, en el pasado y en el futuro, que, de alguna manera, están hechos del mismo material.
 
-- **Ficción y poesía**: lo que solo se dice inventando.
-- **Investigaciones**: psicología, trabajo y personas, con fuentes.
+Todos estos escritos fueron realizados en las orillas del iberá, donde está ambientado. El sol que brilla sobre el agua, los pájaros que cantan por no llorar y las especies únicas que encuentran ahí su lugar, como yo. 
+
+El aguará guazú, ni lobo ni zorro, durante el día es un vecino tímido, en la noche parece más bien el último de los demonios. El jaguareté con su majestuosa caminata y el yacaré que impone en el agua, me acompañaron en el nacimiento de todo lo que hay acá, que no es diferente.
+
+Todo el iberá es así, ambiguo, lo único que no varía, es el brillo inconfundible de sus aguas, por el día el sol es la fuente, por la noche la blanca luna siempre menguante.
 
 *Gracias por pasar. Sentate un rato a la orilla.*
