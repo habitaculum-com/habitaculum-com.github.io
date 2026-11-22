@@ -18,7 +18,11 @@ const activo = (href: string) => (ruta.startsWith(href) ? 'page' : undefined);
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{tituloCompleto}</title>
     <meta name="description" content={descripcion} />
+    <link rel="icon" href={url('favicon.ico')} sizes="48x48" />
     <link rel="icon" href={url('favicon.svg')} type="image/svg+xml" />
+    <link rel="apple-touch-icon" href={url('apple-touch-icon.png')} />
+    <link rel="manifest" href={url('site.webmanifest')} />
+    <meta name="theme-color" content="#2c4a32" />
     <link rel="alternate" type="application/rss+xml" title={SITIO.titulo} href={url('rss.xml')} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -37,7 +41,10 @@ const activo = (href: string) => (ruta.startsWith(href) ? 'page' : undefined);
     <Ambiente />
     <header class="cabecera">
       <div class="contenedor fila">
-        <a class="marca" href={url('')}>
+        <a class="marca" href={url('')} aria-label={`${SITIO.titulo}, inicio`}>
+          <svg class="marca-simbolo" viewBox="0 0 256 256" aria-hidden="true">
+            <path fill-rule="evenodd" d="M48,224 V116 A80,80 0 0 1 208,116 V224 Z M128,206 L100,170 C96,144 93,120 90,82 C106,96 116,112 121,126 H135 C140,112 150,96 166,82 C163,120 160,144 156,170 Z" />
+          </svg>
           <span class="marca-titulo">{SITIO.titulo}</span>
         </a>
         <nav class="principal" id="menu-principal" aria-label="Principal">
@@ -72,6 +79,9 @@ const activo = (href: string) => (ruta.startsWith(href) ? 'page' : undefined);
         <path d="M0,30 C100,10 200,50 300,30 C400,10 500,50 600,30 C700,10 800,50 900,30 C1000,10 1100,50 1200,30 L1200,60 L0,60 Z" />
       </svg>
       <div class="contenedor pie-texto">
+        <svg class="pie-simbolo" viewBox="0 0 256 256" aria-hidden="true">
+          <path fill-rule="evenodd" d="M48,224 V116 A80,80 0 0 1 208,116 V224 Z M128,206 L100,170 C96,144 93,120 90,82 C106,96 116,112 121,126 H135 C140,112 150,96 166,82 C163,120 160,144 156,170 Z" />
+        </svg>
         <p class="versal">{SITIO.titulo}</p>
         <p>{SITIO.pie} · © {new Date().getFullYear()} {SITIO.autor}</p>
         <p><a href={url('escritos/')}>{MENU.escritos}</a> · <a href={url('investigaciones/')}>{MENU.investigaciones}</a> · <a href={url('sobre-mi/')}>{MENU.sobreMi}</a> · <a href={url('buscar/')}>Buscar</a> · <a href={url('rss.xml')}>RSS</a></p>
@@ -108,8 +118,10 @@ const activo = (href: string) => (ruta.startsWith(href) ? 'page' : undefined);
     transition: background 1.4s;
   }
   .fila { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 68px; }
-  .marca { text-decoration: none; color: var(--tinta); }
-  .marca-titulo { font-family: var(--f-titulo); font-size: 1.5rem; font-weight: 600; font-style: italic; }
+  .marca { text-decoration: none; color: var(--tinta); display: inline-flex; align-items: center; gap: .6rem; }
+  .marca-simbolo { width: 34px; height: 34px; flex: none; }
+  .marca-simbolo path { fill: var(--marca); transition: fill 1.4s; }
+  .marca-titulo { font-family: var(--f-titulo); font-size: 1.55rem; font-weight: 600; letter-spacing: .02em; }
   .principal { display: flex; align-items: center; gap: 1.4rem; margin-left: auto; }
   .acciones { display: flex; align-items: center; gap: 1rem; margin-left: 1.4rem; }
   .solo-movil, .hamburguesa { display: none; }
@@ -131,6 +143,8 @@ const activo = (href: string) => (ruta.startsWith(href) ? 'page' : undefined);
   .pie { margin-top: 6rem; position: relative; z-index: 2; }
   .pie-agua { display: block; width: 100%; height: 50px; }
   .pie-agua path { fill: var(--vegetacion); opacity: .9; transition: fill 1.4s; }
+  .pie-simbolo { width: 44px; height: 44px; display: block; margin: 0 auto .6rem; }
+  .pie-simbolo path { fill: var(--marca); transition: fill 1.4s; }
   .pie-texto { background: transparent; text-align: center; padding: 1.5rem 0 2.5rem; font-size: .98rem; color: var(--tinta-suave); }
   .pie { background: linear-gradient(to bottom, transparent 50px, var(--fondo-2) 50px); }
   /* ---------- Celular ---------- */

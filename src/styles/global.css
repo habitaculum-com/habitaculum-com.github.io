@@ -14,6 +14,7 @@
   --linea: rgba(44, 74, 50, 0.28);
   --junco-espiga: #6b4a2a;
   --vegetacion: #2c4a32;
+  --marca: #2c4a32;
   --agua-1: #a9c3b6;
   --agua-2: #79998c;
   --sombra: 0 1px 0 rgba(44, 74, 50, .08), 0 18px 40px -24px rgba(23, 25, 15, .35);
@@ -35,6 +36,7 @@
   --linea: rgba(155, 184, 148, 0.22);
   --junco-espiga: #2c2017;
   --vegetacion: #1c2e21;
+  --marca: #efe6d2;
   --agua-1: #1d302b;
   --agua-2: #0b1513;
   --sombra: 0 1px 0 rgba(0, 0, 0, .3), 0 18px 40px -20px rgba(0, 0, 0, .8);
