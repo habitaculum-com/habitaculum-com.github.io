@@ -2,14 +2,23 @@
   "sitio": {
     "titulo": "Habitaculum",
     "subtitulo": "Ficción, poesía e investigaciones",
-    "autor": "Santi",
+    "autor": "Santiago",
     "descripcion": "Ficción, poesía e investigaciones breves, escritas a la orilla del Iberá.",
     "pie": "Escrito a la orilla de los esteros del Iberá"
   },
   "secciones": {
-    "ficcion": { "nombre": "Ficción", "descripcion": "Historias inventadas que, a veces, dicen más verdad." },
-    "poesia": { "nombre": "Poesía", "descripcion": "Lo que solo se dice en voz baja, a la orilla del estero." },
-    "investigaciones": { "nombre": "Investigaciones", "descripcion": "Preguntas pequeñas perseguidas con método, y algunas reflexiones que nacieron en el camino." }
+    "ficcion": {
+      "nombre": "Relatos",
+      "descripcion": "La realidad es una ficción."
+    },
+    "poesia": {
+      "nombre": "Poesía",
+      "descripcion": "El canto de los pájaros, el sonido que se oye cuando nada más suena."
+    },
+    "investigaciones": {
+      "nombre": "Investigaciones",
+      "descripcion": "Preguntas, respuestas, torpes intentos de comprender lo que nos rodea."
+    }
   },
   "menu": {
     "escritos": "Escritos",
@@ -19,18 +28,38 @@
   "portada": {
     "antetitulo": "Cuaderno del Iberá",
     "ultimoEscrito": "Último escrito",
-    "botonLeer": "Leer el escrito",
-    "invitacion": "Deslizá para entrar al estero",
+    "botonLeer": "Ampliar escrito",
+    "invitacion": "Deslizá para adentrarte en los esteros",
     "recientesAntetitulo": "Lo más reciente",
     "recientesTitulo": "Escritos e investigaciones",
     "seccionesAntetitulo": "Rumbos del estero",
     "seccionesTitulo": "Tres orillas"
   },
   "paginas": {
-    "escritos": { "antetitulo": "Escritos", "titulo": "Ficción y poesía", "bajada": "Relatos y poemas, cada uno en su orilla." },
-    "investigaciones": { "antetitulo": "Cuaderno de campo", "titulo": "Investigaciones", "vacio": "Pronto vas a encontrar acá las primeras investigaciones." },
-    "sobreMi": { "antetitulo": "Quién escribe", "titulo": "Sobre mí" },
-    "buscar": { "antetitulo": "Entre los juncos", "titulo": "Buscar", "bajada": "Escribí una palabra, un tema o un verso que recuerdes.", "sinResultados": "Nada por aquí. Probá con otra palabra." },
-    "noEncontrada": { "antetitulo": "Error 404", "titulo": "Perdido en el estero", "bajada": "Este camino se lo tragaron los camalotes." }
+    "escritos": {
+      "antetitulo": "Escritos",
+      "titulo": "Ficción y poesía",
+      "bajada": "Relatos y poemas, cada uno en su orilla."
+    },
+    "investigaciones": {
+      "antetitulo": "Cuaderno de campo",
+      "titulo": "Investigaciones",
+      "vacio": "Pronto vas a encontrar acá las primeras investigaciones."
+    },
+    "sobreMi": {
+      "antetitulo": "Quién escribe",
+      "titulo": "Sobre mí"
+    },
+    "buscar": {
+      "antetitulo": "Entre los juncos",
+      "titulo": "Buscar",
+      "bajada": "Escribí una palabra, un tema o un verso que recuerdes.",
+      "sinResultados": "Nada por aquí. Probá con otra palabra."
+    },
+    "noEncontrada": {
+      "antetitulo": "Error 404",
+      "titulo": "Perdido en el estero",
+      "bajada": "Este camino se lo tragaron los camalotes."
+    }
   }
 }
