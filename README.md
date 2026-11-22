@@ -1,5 +1,7 @@
 # Habitaculum
 
+**Sitio publicado:** https://habitaculum-com.github.io · **Panel para escribir:** https://app.pagescms.org
+
 Blog personal hecho con [Astro](https://astro.build): escritos (ficción y poesía) e investigaciones, con ilustraciones de aguará guazú, yaguareté y yacaré que cambian entre el modo día y el modo noche.
 
 ## Qué necesitás instalar (una sola vez)
